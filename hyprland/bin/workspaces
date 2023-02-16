@@ -1,0 +1,38 @@
+#!/usr/bin/python
+
+# steal from https://github.com/lauroro/hyprland-dotfiles/blob/master/configs/eww/scripts/workspaces.py
+
+import subprocess
+import os
+import socket
+
+icons = ["", "", "", "", "", "", "", "", "", "", "", ""]
+
+def update_workspace(active_workspace):
+    icons_index = [0,1,2,3,4,5] 
+    
+    icons_index[active_workspace - 1] = icons_index[active_workspace - 1] + 6
+    prompt = f'(eventbox :onscroll "~/.local/bin/cycleworkspace {{}}" (box :class "workspaces" :space-evenly "true" (button :class "workspace-one" :onclick "hyprctl dispatch workspace 1" "{icons[icons_index[0]]}") (button :class "workspace-two" :onclick "hyprctl dispatch workspace 2" "{icons[icons_index[1]]}") (button :class "workspace-three" :onclick "hyprctl dispatch workspace 3" "{icons[icons_index[2]]}") (button :class "workspace-four" :onclick "hyprctl dispatch workspace 4" "{icons[icons_index[3]]}") (button :class "workspace-five" :onclick "hyprctl dispatch workspace 5" "{icons[icons_index[4]]}") (button :class "workspace-six" :onclick "hyprctl dispatch workspace 6" "{icons[icons_index[5]]}")))'
+    
+    subprocess.run(f"echo '{prompt}'", 
+                   shell=True)
+
+sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+
+server_address = f'/tmp/hypr/{os.environ["HYPRLAND_INSTANCE_SIGNATURE"]}/.socket2.sock'
+
+sock.connect(server_address)
+
+while True:
+    new_event = sock.recv(4096).decode("utf-8")
+    
+    for item in new_event.split("\n"):
+            
+        if "workspace>>" == item[0:11]:
+            workspaces_num = item[-1]
+            
+            if int(workspaces_num) > 6:
+                workspaces_num = 1
+                subprocess.run("hyprctl dispatch workspace 1", shell=True)
+
+            update_workspace(int(workspaces_num))

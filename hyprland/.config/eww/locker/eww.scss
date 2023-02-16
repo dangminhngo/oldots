@@ -1,0 +1,119 @@
+@import "../palette.scss";
+
+* {
+  all: unset;
+}
+
+window {
+  font-family: Jetka;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.locker {
+  background-image: url("../images/blurred_wallpaper.jpg");
+  color: $fg1;
+}
+
+.lockbox {
+  background-color: transparent;
+  color: $fg1;
+  border-radius: 8px;
+}
+
+.clock {
+  font-size: 128px;
+  font-weight: 900;
+}
+
+.time {
+  padding: 0px 48px;
+  background-color: $bg0;
+  border-radius: 8px;
+}
+
+.date-clock {
+  padding: 16px;
+  font-family: Jetka;
+  font-size: 24px;
+  font-weight: 800;
+  background-color: $bg0;
+  border-radius: 8px;
+}
+
+.day {
+  padding-bottom: 8px;
+  color: $red;
+}
+
+.date-sep {
+  font-size: 32px;
+}
+
+.date {
+  padding-top: 8px;
+  color: $teal;
+}
+
+/* Lock */
+.lock {
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.lock-icon,
+.lock-icon-danger {
+  font-family: Material Icons Round;
+  font-size: 128px;
+}
+
+.lock-icon {
+  color: $accent;
+}
+
+.lock-icon-danger {
+  color: $red;
+}
+
+.lock-message {
+  font-size: 18px;
+}
+
+/* Form */
+.form {
+  padding: 16px;
+  background-color: $bg0;
+  border-radius: 8px;
+}
+
+.form-label {
+  color: $gray;
+}
+
+.form-password {
+  margin: 0px 16px;
+  padding: 16px 24px;
+  background-color: $bg2;
+  border-radius: 8px;
+  font-size: 18px;
+  letter-spacing: 6px;
+}
+
+.form-message {
+  font-size: 16px;
+  color: $red;
+}
+
+/* Quote */
+.quote {
+  padding: 16px;
+  font-family: Jetka;
+  font-size: 18px;
+  background-color: $bg0;
+  border-radius: 8px;
+}
+
+.quote-author {
+  font-size: 16px;
+  color: $teal;
+}

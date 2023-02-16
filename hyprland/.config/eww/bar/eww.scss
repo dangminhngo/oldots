@@ -1,0 +1,180 @@
+@import "../palette.scss";
+
+* {
+  all: unset;
+}
+
+.tooltip {
+  background-color: $bg1;
+  color: $accent;
+}
+
+.bar {
+  background-color: transparent;
+}
+
+.bar-wrapper {
+  padding: 2px 8px;
+  background-color: $bg0;
+  color: $accent;
+}
+
+.workspaces {
+  padding-top: 3px;
+  font-family: Material Icons Round;
+  font-size: 22px;
+}
+
+.workspace-one,
+.workspace-two,
+.workspace-three,
+.workspace-four,
+.workspace-five,
+.workspace-six {
+  padding: 0px 8px;
+}
+
+.clock {
+  font-family: Jetka;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.time {
+  padding: 2px 8px;
+  background-color: $bg2;
+  color: $fg0;
+  border-radius: 4px;
+}
+
+.launcher {
+  padding: 2px 12px;
+  font-family: Material Icons Round;
+  font-size: 18px;
+  background-color: $accent;
+  color: $bg1;
+  border-radius: 4px;
+}
+
+.power {
+  padding: 2px 16px;
+  font-family: Material Icons Round;
+  font-size: 18px;
+  background-color: $red;
+  color: $bg1;
+  border-radius: 4px;
+}
+
+.volume {
+  padding: 2px 8px;
+  font-family: Material Icons Round;
+  font-size: 18px;
+  background-color: $teal;
+  color: $bg1;
+  border-radius: 4px;
+}
+
+.volreveal {
+  padding: 2px 8px;
+  border: 1px solid $bg2;
+  border-radius: 4px;
+  background-color: $teal;
+}
+
+scale trough {
+  all: unset;
+  background-color: $gray;
+  border-radius: 4px;
+  min-height: 8px;
+  min-width: 160px;
+}
+
+.volbar trough highlight {
+  background-color: $bg1;
+  border-radius: 4px;
+}
+
+.volpercentage {
+  font-family: Jetka;
+  font-size: 14px;
+  font-weight: 800;
+  color: $bg1;
+}
+
+.sysmonitor {
+  padding: 2px 6px;
+  font-family: Material Icons Round;
+  font-size: 18px;
+  background-color: $cyan;
+  color: $bg1;
+  border-radius: 4px;
+}
+
+.sysreveal {
+  padding: 2px 6px;
+  background-color: $cyan;
+  color: $bg1;
+  border-radius: 4px;
+}
+
+.cpu,
+.memory {
+  padding: 2px 6px;
+  font-family: Material Icons Round;
+  font-size: 18px;
+  border-radius: 4px;
+}
+
+.cpu-label,
+.memory-label {
+  font-family: Jetka;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.recording {
+  padding: 2px;
+  font-family: Material Icons Round;
+  font-size: 18px;
+  background-color: $red;
+  color: $bg1;
+  border-radius: 4px;
+}
+
+.recording-label {
+  font-family: Jetka;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.app-launcher,
+.network,
+.nightlight,
+.idle-inhibitor,
+.zathura {
+  padding: 4px 8px;
+  font-family: Material Icons Round;
+  font-size: 18px;
+  color: $bg1;
+  border-radius: 4px;
+}
+
+.app-launcher {
+  background-color: cyan;
+}
+
+.network {
+  background-color: $blue;
+}
+
+.nightlight {
+  background-color: $yellow;
+}
+
+.idle-inhibitor {
+  background-color: $purple;
+}
+
+.zathura {
+  background-color: $magenta;
+}

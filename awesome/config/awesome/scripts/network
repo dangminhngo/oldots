@@ -1,0 +1,29 @@
+#!/bin/fish
+
+function get_state
+  set state (nmcli n)
+  if test $state = "enabled"
+    echo on
+  else
+    echo off
+  end
+end
+
+function toggle
+  set state (nmcli n)
+
+  if test $state = "enabled"
+    nmcli n off
+    echo "off"
+  else
+    nmcli n on
+    echo "on"
+  end
+end
+
+switch $argv[1]
+  case toggle
+    toggle
+  case state
+    get_state
+end

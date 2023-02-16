@@ -1,0 +1,14 @@
+#!/bin/fish
+
+set action (notify-send --app-name="Alacritty" --icon="Alacritty" --action="Dismiss" --action="Ignore" --action="Accept" "Hello from Dunstify" "This is a sample notification from dunstify")
+
+switch $action
+  case 0
+    echo Dismiss
+  case 1
+    echo Ignore
+  case 2
+    echo Accept
+  case "*"
+    echo Dismiss
+end

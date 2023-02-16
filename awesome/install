@@ -1,0 +1,196 @@
+#!/bin/fish
+echo "Installing base packages ..."
+sudo pacman -S --noconfirm --needed base-devel git fish rustup
+echo "[DONE] Packages installed."
+
+sleep 1
+
+# Install rustup toolchain
+echo "Installing rustup with its stable toolchain ..."
+rustup install stable
+rustup default stable
+echo "[DONE] Rustup installed."
+
+sleep 1
+
+# Install Paru
+if which paru
+  echo "[DONE] Paru detected."
+else
+  echo "Installing paru ..."
+  git clone https://aur.archlinux.org/paru.git
+  pushd paru
+  makepkg -si --noconfirm
+  popd
+  rm -rf paru
+  echo "[DONE] Paru installed."
+end
+
+sleep 1
+
+echo "Refreshing repositories & Installing common packages with paru ..."
+paru -Syy --noconfirm
+paru -Sy --noconfirm archlinux-keyring
+
+paru -S --noconfirm --needed \
+  alacritty \
+  awesome-git \
+  breeze-snow-cursor-theme \
+  btop \
+  chromium \
+  clang \
+  curl \
+  docker \
+  docker-compose \
+  docker-machine \
+  fd \
+  ffmpeg \
+  firefox-developer-edition \
+  fnm-bin \
+  glow \
+  go \
+  golangci-lint \
+  gtk3 \
+  gtk4 \
+  imv \
+  jq \
+  lf \
+  libnotify \
+  luacheck \
+  man \
+  mongodb-bin \
+  mongodb-compass \
+  mpc \
+  mpd \
+  mpdris2 \
+  mpv \
+  neovim \
+  optipng \
+  pamixer \
+  papirus-icon-theme \
+  pdfjs \
+  picom-jonaburg-git \
+  pipewire \
+  pipewire-alsa \
+  pipewire-pulse \
+  pipewire-jack \
+  polkit-dumb-agent-git \
+  postman-bin \
+  python-adblock \
+  python-pip \
+  redshift \
+  ripgrep \
+  rofi \
+  rsync \
+  scrot \
+  sddm \
+  sddm-sugar-candy-git \
+  starship \
+  stylua \
+  thunar \
+  thunar-archive-plugin \
+  todotxt \
+  tree \
+  ttf-roboto \
+  unzip \
+  upower \
+  vscode \
+  wireplumber \
+  xautolock \
+  xcolor \
+  xclip \
+  xdg-utils \
+  xdg-user-dirs \
+  xf86-video-amdgpu \
+  zathura \
+  zathura-pdf-poppler
+
+sleep 1
+
+# Enable systemd services
+echo "Enabling services ..."
+sudo systemctl enable sddm.service
+
+sleep 1
+
+# SDDM
+echo "Configuring SDDM.."
+sudo rsync --recursive ./extras/sddm.conf.d /etc/
+sudo rsync ./config/sugar-candy/theme.conf /usr/share/sddm/themes/sugar-candy/
+
+sleep 1
+
+echo "Create default user directories..."
+xdg-user-dirs-update
+
+sleep 1
+
+# Fonts
+echo "Downloading & copying fonts to directories ..."
+rm -rf ~/.local/share/{themes,fonts}
+mkdir -p ~/.local/share/{themes,fonts}
+git clone https://github.com/dangminhngo/fonts.git
+cp fonts/Devka/patched/* ~/.local/share/fonts/
+cp fonts/Others/* ~/.local/share/fonts/
+rm -rf fonts
+fc-cache -r
+
+# Run Docker with current user privileges
+sudo usermod -aG docker $USER
+
+sleep 1
+
+echo "Copying configuration files to their locations ..."
+# Copy common configs
+rm -rf ~/.config
+mkdir -p ~/.config
+rsync --recursive ./config/* ~/.config/
+
+# Copy common extra configs
+rsync ./extras/.gitconfig ~/
+sudo rsync --recursive ./extras/reflector /etc/xdg/
+sudo rsync ./extras/xorg.conf.d/20-amdgpu.conf /etc/X11/xorg.conf.d/
+sudo rsync ./extras/modprobe.d/amdgpu.conf /etc/modprobe.d/
+rsync --recursive ./extras/.icons ~/
+# sudo rsync --recursive ./extras/timeshift /etc/
+
+# Remove default cursor theme
+sudo rm -rf /usr/share/icons/default
+
+sleep 1
+
+echo "Fix screen tearing for AMD GPU ..."
+xrandr --output HDMI-A-0 --set TearFree on
+
+sleep 1
+
+# Install GTK themes
+echo "Downloading & copying Aesthetic GTK themes ..."
+git clone https://github.com/jadnw/aesthetic.gtk.git
+cp -R aesthetic.gtk/themes/Aesthetic ~/.local/share/themes/
+rm -rf aesthetic.gtk
+
+# Copy login background wallpaper to its location
+sudo rsync ./config/awesome/themes/wallpapers/greeting.jpg /usr/share/sddm/themes/sugar-candy/
+
+sleep 1
+
+# Install NodeJS
+echo "Installing Node.js ..."
+fnm install v18
+
+sleep 1
+
+# Install black (python formatter)
+echo "Install black with PIP ..."
+pip install black
+
+sleep 1
+
+# Clean up
+echo "Cleaning up ..."
+paru -Rns (paru -Qdtq)
+
+sleep 1
+
+echo "Reboot and Enjoy!"
