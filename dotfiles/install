@@ -1,6 +1,5 @@
 #!/bin/fish
 
-# Install basic packages
 sudo pacman -S --noconfirm --needed base-devel git fish rustup
 
 # Install rustup toolchain
@@ -12,7 +11,7 @@ sleep 1
 
 # Install Paru
 if which paru
-  echo "[DONE] Paru has been detected."
+  echo "Paru detected."
 else
   echo "Installing paru ..."
   git clone https://aur.archlinux.org/paru.git
@@ -30,74 +29,74 @@ paru -Sy --noconfirm archlinux-keyring
 
 sleep 1
 
-echo "Installing necessary packages ..."
+echo "Installing base packages ..."
 paru -S --noconfirm --needed \
-  alacritty \
   base-devel \
-  btop \
-  breeze-snow-cursor-theme \
-  calc \
   clang \
   curl \
-  chromium \
   docker \
   docker-compose \
   docker-machine \
-  dunst \
-  eww-wayland-git \
   fd \
-  firefox-developer-edition \
   fish \
   fnm-bin \
-  hyprland-git \
-  hyprpaper-git \
   git \
-  glfw-wayland \
   go \
   golangci-lint \
-  grim \
-  gtk-layer-shell \
   gtk3 \
   gtk4 \
-  imagemagick \
-  imv \
   jq \
   lf \
   luacheck \
   man \
   neovim \
-  papirus-icon-theme \
   pdfjs \
-  pipewire \
-  polkit-kde-agent \
   python-adblock \
   python-pip \
-  qt5-wayland \
-  qt6-wayland \
-  qutebrowser \
   ripgrep \
-  rofi-lbonn-wayland-git \
   rsync \
   rustup \
+  stylua \
+  tree \
+  unzip \
+  xdg-utils \
+  xdg-user-dirs \
+  vscode
+
+sleep 1
+
+echo "Installing necessary packages ..."
+paru -S --noconfirm --needed \
+  alacritty \
+  btop \
+  breeze-snow-cursor-theme \
+  calc \
+  chromium \
+  dunst \
+  firefox-developer-edition \
+  glfw-wayland \
+  grim \
+  imagemagick \
+  imv \
+  papirus-icon-theme \
+  polkit-kde-agent \
+  qt5-wayland \
+  qt6-wayland \
+  rofi-lbonn-wayland-git \
   sddm-git \
   sddm-sugar-candy-git \
   slurp \
   starship \
+  sway \
+  swaybg \
   swayidle \
   swaylock-effects-git \
-  stylua \
-  tree \
   ttf-roboto \
-  unzip \
-  xdg-desktop-portal-hyprland-git \
-  xdg-utils \
-  xdg-user-dirs \
-  vscode \
+  waybar \
   wf-recorder \
   wlr-randr \
   wlsunset \
   wl-clipboard \
-  wireplumber \
   xorg-xwayland \
   xorg-xlsclients \
   zathura \
@@ -108,24 +107,21 @@ sleep 1
 # Enable systemd services
 echo "Enabling services ..."
 sudo systemctl enable sddm.service
-echo "[DONE] System services enabled."
 
 # SDDM
 echo "Configuring SDDM.."
 sudo rsync --recursive ./extras/sddm.conf.d /etc/
 sudo rsync ./.config/sugar-candy/theme.conf /usr/share/sddm/themes/sugar-candy/
-echo "[DONE] SDDM configured."
 
 sleep 1
 
 echo "Create default user directories..."
 xdg-user-dirs-update
-echo "[DONE] Default dirs created."
 
-echo "Copy executables to ~/.local/bin ..."
-mkdir ~/.local/bin
+sleep 1
+echo "Installing executables ..."
+mkdir -p ~/.local/bin
 cp ./bin/* ~/.local/bin
-sudo cp ./bin/liblua_pam.so /usr/lib/lua/5.4/
 
 sleep 1
 
@@ -134,63 +130,52 @@ echo "Downloading & copying fonts to directories ..."
 rm -rf ~/.local/share/{themes,fonts}
 mkdir -p ~/.local/share/{themes,fonts}
 git clone https://github.com/dangminhngo/fonts.git
-rsync fonts/Devka/patched/* ~/.local/share/fonts/
+cp fonts/Devka/patched/* ~/.local/share/fonts/
+cp fonts/Others/* ~/.local/share/fonts/
 rm -rf fonts
 fc-cache -r
-echo "[DONE] Fonts copied to ~/.local/share/fonts & /usr/share/fonts."
 
 # Run Docker with current user privileges
-echo "Run docker without sudo ..."
 sudo usermod -aG docker $USER
 
 sleep 1
 
-echo "Copying configurations..."
-# Copy common configs
+echo "Copying configuration files to their locations ..."
 rm -rf ~/.config
-mkdir -p ~/.config
-rsync --recursive ./config/* ~/.config/
+rsync --recursive ./.config ~/
 
-# Copy common extra configs
 rsync ./extras/.gitconfig ~/
 sudo rsync --recursive ./extras/reflector /etc/xdg/
-rsync --recursive ./extras/.icons ~/
-
-# Remove default cursor theme
-sudo rm -rf /usr/share/icons/default
-
-sleep 1
 
 # Install GTK themes
-echo "Installing Aesthetic GTK themes ..."
-git clone https://github.com/jadnw/aesthetic.gtk.git
-cp -R aesthetic.gtk/themes/Aesthetic ~/.local/share/themes/
-rm -rf aesthetic.gtk
+echo "Downloading & copying darkoma GTK themes"
+git clone https://github.com/dangminhngo/darkoma.gtk.git
+cp -R darkoma.gtk/themes/* ~/.local/share/themes/
+rm -rf darkoma.gtk
 
 sleep 1
 
-# Copy login background wallpaper to its location
-echo "Copying greeting wallpaper to /usr/share/sddm/themes/sugar-candy"
-sudo rsync ./config/wallpapers/greeting.jpg /usr/share/sddm/themes/sugar-candy/
+# Set greeting wallpaper
+echo "Setting wallpapers ..."
+mkdir -p ~/.config/wallpapers
+rsync ./wallpapers/{wallpaper.jpg,lockscreen.jpg} ~/.config/wallpapers/
+sudo rsync ./wallpapers/greeting.jpg /usr/share/sddm/themes/sugar-candy/
 
-sleep 1
-
-# Install NodeJS
-echo "Installing Node.js ..."
+# Install node
+echo "Install Node v18 ..."
 fnm install v18
 
-sleep 1
-
-# Install black (python formatter)
-echo "Install black with PIP ..."
-pip install black
-
-sleep 1
-
-# Clean up
-echo "Cleaning up ..."
-paru -Rns (paru -Qdtq)
+# Remove build dependencies
+echo "Removing build dependencies ..."
+set i3_installed (paru -Qs i3-wm | grep "local/")
+if test -n "$i3_installed"
+  paru -Rns --noconfirm i3-wm
+end
 
 sleep 1
 
-echo "Your should reboot to system. HAPPY CODING!"
+paru -Rns --noconfirm (paru -Qdtq)
+
+sleep 1
+
+echo "[DONE] Reboot and Enjoy. Happy Coding!"

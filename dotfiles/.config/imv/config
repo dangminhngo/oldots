@@ -1,0 +1,28 @@
+# ▪  • ▌ ▄ ·.  ▌ ▐·
+# ██ ·██ ▐███▪▪█·█▌
+# ▐█·▐█ ▌▐▌▐█·▐█▐█•
+# ▐█▌██ ██▌▐█▌ ███ 
+# ▀▀▀▀▀ █▪▀▀▀. ▀  
+# Created by: Dang Minh "Jaime" Ngo
+# Github: @dangminhngo
+# Email: dangminhngo.dev@gmail.com
+
+# Darkoma for imv
+# ~/.config/imv/config
+
+# styling
+[options]
+background = #202e3c
+fullscreen = false
+overlay = true
+overlay_text_color = #f4f6f9
+overlay_background_color = #283a4c
+overlay_background_alpha = ff
+overlay_font = Jetka:11
+overlay_position_bottom = false
+
+# bindings
+[binds]
+j = next
+k = prev
+    

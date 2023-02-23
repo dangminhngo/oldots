@@ -1,0 +1,28 @@
+/* Darkoma colorscheme for GTK CSS */
+
+ /* ~/.config/waybar/theme.css */
+
+@define-color accent #4fd5b5;
+@define-color bg0 #151f28;
+@define-color bg1 #202e3c;
+@define-color bg2 #283a4c;
+@define-color bg3 #31475c;
+@define-color bg4 #3a536d;
+
+@define-color fg0 #dee5ed;
+@define-color fg1 #b2c4d6;
+@define-color fg2 #9cb3ca;
+@define-color fg3 #7192b3;
+@define-color black #18222b;
+@define-color red #f3787d;
+@define-color orange #e3a36d;
+@define-color yellow #e4d76c;
+@define-color green #93d785;
+@define-color teal #4fd5b5;
+@define-color cyan #5ddae2;
+@define-color blue #62b1ff;
+@define-color magenta #e67aca;
+@define-color purple #b48dff;
+@define-color white #f4f6f9;
+@define-color gray #4e7093;
+    
